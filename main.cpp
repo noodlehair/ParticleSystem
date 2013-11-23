@@ -26,7 +26,7 @@ float angle;
 
 bool shadeType = false;
 bool lighting = false;
-
+bool pressTracker = false;
 static float lookAtLocationX = 0, lookAtLocationY = 0, lookAtLocationZ = 10;
 
 float rotateA = 0;
@@ -173,23 +173,26 @@ void ball_move(void){
 void idle(void){
 	angle += 0.08;
 	ball_move();
-
 	glutPostRedisplay();
 }
 
 void beingShoot(float x, float y, float z, float radius, bool* ifex, ParticleSystem* ps){
-
+	if (*ifex){
 	glPushMatrix();
 	//glTranslatef(0,0,-15);
 	glTranslatef(x, y, z);
 	//glRotatef(5,1,0,0);
 	glScalef(radius / 5, radius / 5, radius / 5);
-	if (*ifex){
-		
-	}
-	*ifex = false;
 	ps->display();
 	glPopMatrix();
+	if (ps->flameEmitter->destroy){
+		delete ps;
+		*ifex = false;
+	}
+	}
+	
+	
+	
 }
 
 void display(void)
@@ -302,13 +305,21 @@ void keyboard(unsigned char key, int x, int y) {
 	case 's': lookAtLocationZ += 0.1; break;
 	case 'i': rotateA -= 0.5; break;
 	case 'o': rotateA += 0.5; break;
-	case 't':{
+	/*case 't':{
 				 shoot_ball = true;
-	}
+	}*/
 
 	}
 }
+void onMouse(int button, int state, int x, int y) {
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+	shoot_ball = true;
+	}
+}
 
+void onMotion(int x, int y) {
+
+}
 int main(int argc, char * argv[])
 {
 
@@ -320,10 +331,11 @@ int main(int argc, char * argv[])
 	glutCreateWindow("Material World");
 
 	init();
-
 	glutDisplayFunc(display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
+	glutMouseFunc(onMouse);
+	glutMotionFunc(onMotion);
 	glutIdleFunc(idle);
 	glutMainLoop();
 

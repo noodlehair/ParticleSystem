@@ -9,10 +9,10 @@ FlameEmitter::FlameEmitter(const char* file_name){
 	slowdown = 2.0f;
 	zoom = -20.0f;
 	initFlag = false;
-
+	destroy = false;
 }
 FlameEmitter :: ~FlameEmitter(void){
-	delete[] image;
+	delete image;
 }
 
 void FlameEmitter::flameEmitterInit(){
@@ -84,8 +84,9 @@ void FlameEmitter::flameEmitterDisplay(){
 			particle[loop].zi += particle[loop].zg;
 			particle[loop].life -= particle[loop].fade;
 
-			if (particle[loop].life<0.0f)
+			if (particle[loop].life<-25.0f)
 			{
+				destroy = true;
 				/*particle[loop].life=1.0f;
 				particle[loop].fade=float(rand()%100)/1000.0f+0.003f;
 				particle[loop].x=0.0f;

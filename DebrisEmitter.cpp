@@ -13,8 +13,8 @@ DebrisEmitter::DebrisEmitter(const char* file_name_1, const char* file_name_2){
 
 }
 DebrisEmitter :: ~DebrisEmitter(void){
-	delete[] image1;
-	delete[] image2;
+	delete image1;
+	delete image2;
 }
 
 void DebrisEmitter::debrisEmitterInit(){

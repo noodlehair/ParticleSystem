@@ -14,7 +14,7 @@ ShockwaveEmitter::ShockwaveEmitter(const char* file_name){
 
 }
 ShockwaveEmitter :: ~ShockwaveEmitter(void){
-	delete[] image;
+	delete image;
 }
 
 void ShockwaveEmitter::shockwaveEmitterInit(){

@@ -14,7 +14,7 @@ FlashEmitter::FlashEmitter(const char* file_name){
 	initFlag = false;
 }
 FlashEmitter :: ~FlashEmitter(void){
-	delete[] image;
+	delete image;
 }
 
 void FlashEmitter::flashEmitterInit(){

@@ -20,5 +20,5 @@ public:
 	GLuint	texture[1];
 	bool initFlag;
 	particles particle[MAX_PARTICLES];	// Particle Array 
-	
+	bool destroy;
 };

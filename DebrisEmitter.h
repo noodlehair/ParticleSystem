@@ -20,5 +20,6 @@ public:
 	GLuint	delay;
 	GLuint	texture[2];
 	bool initFlag;
+	bool destroy;
 	particles debris_particle[MAX_DEBRIS_PARTICLES];	// Particle Array 
 };

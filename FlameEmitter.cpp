@@ -1,7 +1,8 @@
 #include "FlameEmitter.h"
 #include "LocalGraphicsLib.h"
-
-
+#include <windows.h>
+#include <mmsystem.h>
+#pragma comment(lib, "winmm.lib")
 
 FlameEmitter::FlameEmitter(const char* file_name){
 
@@ -17,6 +18,7 @@ FlameEmitter :: ~FlameEmitter(void){
 
 void FlameEmitter::flameEmitterInit(){
 	//ImageIO* the_image = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/falme.ppm");
+	PlaySound(TEXT("explosion4.wav"), NULL, SND_FILENAME |SND_ASYNC);
 	LoadGLTextures(image, &texture[0]);
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);

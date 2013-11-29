@@ -1,11 +1,11 @@
 #include "ParticleSystem.h"
 
 ParticleSystem :: ParticleSystem(){
-	flameEmitter = new FlameEmitter("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/falme.ppm");
-	flashEmitter = new FlashEmitter("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/flash.ppm");
-	shockwaveEmitter = new ShockwaveEmitter("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/shock.ppm");
-	debrisEmitter = new DebrisEmitter("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/debris1.ppm",
-		                                "C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/debris2.ppm");
+	flameEmitter = new FlameEmitter("falme.ppm");
+	flashEmitter = new FlashEmitter("flash.ppm");
+	shockwaveEmitter = new ShockwaveEmitter("shock.ppm");
+	debrisEmitter = new DebrisEmitter("debris1.ppm",
+		                                "debris2.ppm");
 
 }
 

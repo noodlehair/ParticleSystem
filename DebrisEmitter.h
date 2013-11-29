@@ -1,7 +1,7 @@
 #include "LocalGraphicsLib.h"
 #include "ImageIO.h"
 #include <glut.h>
-#define MAX_DEBRIS_PARTICLES 2000
+#define MAX_DEBRIS_PARTICLES 1000
 
 using namespace std;
 class DebrisEmitter{

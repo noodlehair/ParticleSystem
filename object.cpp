@@ -23,7 +23,7 @@ using namespace std;
 		float bullit_x, float bullit_y, float bullit_z, bool* ifDraw){
 
         glPushMatrix();
-         
+		glPushAttrib(GL_CURRENT_BIT);
         glTranslatef(position_x, position_y, position_z);
  
         GLfloat mat_ambient[]  = {ambient, ambient, ambient, 1.0f};         
@@ -48,6 +48,6 @@ using namespace std;
 			 glColor3f(color_r,color_g,color_b);
 			glutSolidSphere(radius, 50,50);
 		 }
-         
+		 glPopAttrib();
         glPopMatrix();
     }

@@ -19,10 +19,11 @@ ParticleSystem :: ~ParticleSystem(){
 }
 
 void ParticleSystem :: display(){
+	glEnable(GL_TEXTURE_2D);
 	flashEmitter->flashEmitterDisplay();
 	shockwaveEmitter->shockwaveEmitterDisplay();	
 	flameEmitter->flameEmitterDisplay();
     debrisEmitter->debrisEmitterDisplay();
-									
+	glEnable(GL_TEXTURE_2D);								
 
 }

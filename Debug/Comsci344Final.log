@@ -1,8 +1,10 @@
-﻿Build started 22-11-2013 16:51:40.
+﻿Build started 30-11-2013 18:19:51.
      1>Project "C:\Users\Lanceton\documents\visual studio 2013\Projects\Comsci344Final\Comsci344Final\Comsci344Final.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Lanceton\Downloads\glut-3.7.6-bin\glut-3.7.6-bin" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"C:\Users\Lanceton\Downloads\glut-3.7.6-bin\glut-3.7.6-bin" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp player.cpp
+         player.cpp
          main.cpp
+         Generating Code...
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Lanceton\documents\visual studio 2013\Projects\Comsci344Final\Debug\Comsci344Final.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Users\Lanceton\Downloads\glut-3.7.6-bin\glut-3.7.6-bin" glut32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Lanceton\documents\visual studio 2013\Projects\Comsci344Final\Debug\Comsci344Final.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Lanceton\documents\visual studio 2013\Projects\Comsci344Final\Debug\Comsci344Final.lib" /MACHINE:X86 Debug\DebrisEmitter.obj
          Debug\FlameEmitter.obj
@@ -20,4 +22,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:01.69
+Time Elapsed 00:00:03.91

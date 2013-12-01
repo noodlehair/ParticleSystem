@@ -63,8 +63,59 @@ ParticleSystem *p5;
 ParticleSystem *p6;
 ParticleSystem *p7;
 
+//skybox texture and prpoerties
+ImageIO* tex_image_6;
+ImageIO* tex_image_1;
+ImageIO* tex_image_2;
+ImageIO* tex_image_3;
+ImageIO* tex_image_4;
+ImageIO* tex_image_5;
+// texture mapping
+GLuint texName[6];
+
+float t = 5.0f;
+float camera_yaw = 0.0f;
+float camera_pitch = 0.0f;
+float CAMERA_Move = 1.0f;
+
+void textureMapping(GLuint texture, ImageIO* image){
+
+	glEnable(GL_TEXTURE_2D);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->getWidth(), image->getHeight(), 0, GL_RGB, GL_FLOAT, image->getImageDisplayArray());
+
+}
 
 void init(void){
+
+
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	tex_image_1 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
+	tex_image_2 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
+	tex_image_3 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
+	tex_image_4 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
+	tex_image_5 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
+	tex_image_6 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
+	//texture mapping
+
+
+	glGenTextures(1, &texName[0]);
+	textureMapping(texName[0], tex_image_1);
+	glGenTextures(1, &texName[1]);
+	textureMapping(texName[1], tex_image_2);
+	glGenTextures(1, &texName[2]);
+	textureMapping(texName[2], tex_image_3);
+	glGenTextures(1, &texName[3]);
+	textureMapping(texName[3], tex_image_4);
+	glGenTextures(1, &texName[4]);
+	textureMapping(texName[4], tex_image_5);
+	glGenTextures(1, &texName[5]);
+	textureMapping(texName[5], tex_image_6);
 	angle = 0;
 
 	glEnable(GL_LIGHT0);
@@ -72,9 +123,8 @@ void init(void){
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
-
+	/*
+*/
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 
 	glLoadIdentity();
@@ -128,14 +178,14 @@ void init(void){
 	p4 = new ParticleSystem();
 	p5 = new ParticleSystem();
 	p6 = new ParticleSystem();
-	p7= new ParticleSystem();
+	p7 = new ParticleSystem();
 
 
 }
 
 
 void ball(void){
-
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	GLfloat mat_ambient[] = { 1, 1, 1, 1.0f };
 	GLfloat mat_diffuse[] = { 1, 1, 1, 1.0f };
 	GLfloat mat_specular[] = { 1, 1, 1, 1.0f };
@@ -152,6 +202,7 @@ void ball(void){
 
 	glutSolidSphere(0.15, 20, 12);
 	glPopMatrix();
+	glPopAttrib();
 }
 
 void ball_move(void){
@@ -176,30 +227,100 @@ void idle(void){
 	glutPostRedisplay();
 }
 
-void beingShoot(float x, float y, float z, float radius, bool* ifex, ParticleSystem* ps){
-	
-	if (*ifex){
+void drawPolygon(){
+
 	glPushMatrix();
-	//glTranslatef(0,0,-15);
-	glTranslatef(x, y, z);
-	//glRotatef(5,1,0,0);
-	glScalef(radius / 5, radius / 5, radius / 5);
-	/*glDisable(GL_DEPTH_TEST);
-	glEnable(GL_BLEND);*/
-	glDepthMask(GL_FALSE);
-	ps->display();
-	glDepthMask(GL_TRUE);
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glLoadIdentity();
+	// glTranslatef(lookAtLocationX,lookAtLocationY,lookAtLocationZ);
+	glRotatef(camera_pitch, 1.0f, 0.0f, 0.0f);
+	glRotatef(camera_yaw, 0.0f, 1.0f, 0.0f);
+
+
+	glBindTexture(GL_TEXTURE_2D, texName[4]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0); glVertex3f(t, -t, -t);
+	glTexCoord2f(1, 0); glVertex3f(-t, -t, -t);
+	glTexCoord2f(1, 1); glVertex3f(-t, t, -t);
+	glTexCoord2f(0, 1); glVertex3f(t, t, -t);
+	glEnd();
+
+	// Render the left quad
+	glBindTexture(GL_TEXTURE_2D, texName[1]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0); glVertex3f(t, -t, t);
+	glTexCoord2f(1, 0); glVertex3f(t, -t, -t);
+	glTexCoord2f(1, 1); glVertex3f(t, t, -t);
+	glTexCoord2f(0, 1); glVertex3f(t, t, t);
+	glEnd();
+
+	// Render the back quad
+	glBindTexture(GL_TEXTURE_2D, texName[5]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0); glVertex3f(-t, -t, t);
+	glTexCoord2f(1, 0); glVertex3f(t, -t, t);
+	glTexCoord2f(1, 1); glVertex3f(t, t, t);
+	glTexCoord2f(0, 1); glVertex3f(-t, t, t);
+
+	glEnd();
+
+	// Render the right quad
+	glBindTexture(GL_TEXTURE_2D, texName[0]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0); glVertex3f(-t, -t, -t);
+	glTexCoord2f(1, 0); glVertex3f(-t, -t, t);
+	glTexCoord2f(1, 1); glVertex3f(-t, t, t);
+	glTexCoord2f(0, 1); glVertex3f(-t, t, -t);
+	glEnd();
+
+	// Render the top quad
+	glBindTexture(GL_TEXTURE_2D, texName[3]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 1); glVertex3f(-t, t, -t);
+	glTexCoord2f(0, 0); glVertex3f(-t, t, t);
+	glTexCoord2f(1, 0); glVertex3f(t, t, t);
+	glTexCoord2f(1, 1); glVertex3f(t, t, -t);
+	glEnd();
+
+	// Render the bottom quad
+	glBindTexture(GL_TEXTURE_2D, texName[2]);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0, 0); glVertex3f(-t, -t, -t);
+	glTexCoord2f(0, 1); glVertex3f(-t, -t, t);
+	glTexCoord2f(1, 1); glVertex3f(t, -t, t);
+	glTexCoord2f(1, 0); glVertex3f(t, -t, -t);
+	glEnd();
+	glPopAttrib();
 	glPopMatrix();
-	if (ps->flameEmitter->destroy){
-	
-		delete ps;
-		*ifex = false;
-		
+
+}
+
+void beingShoot(float x, float y, float z, float radius, bool* ifex, ParticleSystem* ps){
+
+	if (*ifex){
+		glPushAttrib(GL_CURRENT_BIT);
+		glPushMatrix();
+		//glTranslatef(0,0,-15);
+		glTranslatef(x, y, z);
+		//glRotatef(5,1,0,0);
+		glScalef(radius / 5, radius / 5, radius / 5);
+		/*glDisable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);*/
+		glDepthMask(GL_FALSE);
+		ps->display();
+		glDepthMask(GL_TRUE);
+		glPopMatrix();
+		if (ps->flameEmitter->destroy){
+
+			delete ps;
+			*ifex = false;
+
+		}
+		glPopAttrib();
 	}
-	}
-	
-	
-	
+
+
+
 }
 
 void display(void)
@@ -217,70 +338,97 @@ void display(void)
 	gluLookAt(lookAtLocationX, lookAtLocationY, lookAtLocationZ, lookAtLocationX, lookAtLocationY, -100, 0, 1, 0);
 	glPolygonMode(GL_LINE, GL_FILL);
 	glEnable(GL_DEPTH_TEST);
+
+	glDisable(GL_LIGHTING);
+	glDepthMask(GL_FALSE);
+	glEnable(GL_TEXTURE_2D);
+	drawPolygon();
+	glDepthMask(GL_TRUE);
+	glDisable(GL_TEXTURE_2D);
+	glEnable(GL_LIGHTING);
+
 	player spaceShip(2.0);
 	spaceShip.draw(lookAtLocationX, lookAtLocationY, lookAtLocationZ);
-	
+
 	glPushMatrix();
 
 	glRotatef(rotateA, 0, 1, 0);
 
 	//glTranslatef(lookAtLocationX, 0, lookAtLocationZ);
 	if (ifDraw){
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		object sun(0.5, 0, 0, -15, 0.95, 0.63, 0);
 		sun.draw(0, 0, 0, 0.5, 0, lookAtLocationX, lookAtLocationY, ball_z_distance, &ifDraw);
 	}
-	else
-		beingShoot(0, 0, -15, 0.5, &ifExplostion,p);
+
 	if (ifDraw1){
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		object planet1(0.1, 0.8, 0, -15, 0.8, 0.1, 0.21);
 		planet1.draw(1, 0, 0, 0.3, 20, lookAtLocationX, lookAtLocationY, ball_z_distance, &ifDraw1);
 	}
-	else
-		beingShoot(0.8, 0, -15, 0.1, &ifExplostion1,p1);
+
 	if (ifDraw2){
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		object planet2(0.15, 1.2, 0, -15, 0, 1.0, 0.41);
 		planet2.draw(0, 1, 0, 0, 30, lookAtLocationX, lookAtLocationY, ball_z_distance, &ifDraw2);
 	}
-	else
-		beingShoot(1.2, 0, -15, 0.15, &ifExplostion2,p2);
+
 	if (ifDraw3){
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		object planet3(0.18, 0, 1.8, -15, .5, 0, 0);
 		planet3.draw(0, 0, 1, 0, 40, lookAtLocationX, lookAtLocationY, ball_z_distance, &ifDraw3);
 	}
-	else
-		beingShoot(0, 1.8, -15, 0.18, &ifExplostion3,p3);
+
 	if (ifDraw4){
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		object planet4(0.22, 0.5, 0.5, -12.5, 0, 0.2, 0.321);
 		planet4.draw(1, 0, 1, 0, 40, lookAtLocationX, lookAtLocationY, ball_z_distance, &ifDraw4);
 	}
-	else
-		beingShoot(0.5, 0.5, -12.5, 0.22, &ifExplostion4,p4);
+
 	if (ifDraw5){
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		object planet5(0.25, -3.2, 0, -14, 0, 0.4, 0.21);
 		planet5.draw(0, 1, 1, 0, 40, lookAtLocationX, lookAtLocationY, ball_z_distance, &ifDraw5);
 	}
-	else
-		beingShoot(-3.2, 0, -14, 0.25, &ifExplostion5,p5);
+
 	if (ifDraw6){
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		object planet6(0.3, 4.0, -2, -15, 0, 0.10, 0.31);
 		planet6.draw(0.5, 0.5, 0.5, 0.5, 40, lookAtLocationX, lookAtLocationY, ball_z_distance, &ifDraw6);
 	}
-	else
-		beingShoot(4.0, -2, -15, 0.3, &ifExplostion6,p6);
+
 	if (ifDraw7){
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		object planet7(0.4, 1, 2, -5, 0.2, 0, 0.21);
 		planet7.draw(1, 1, 1, 0, 50, lookAtLocationX, lookAtLocationY, ball_z_distance, &ifDraw7);
 	}
-	else
-		beingShoot(1, 2, -5, 0.4, &ifExplostion7,p7);
+
+
+
+	if (!ifDraw){
+		beingShoot(0, 0, -15, 0.5, &ifExplostion, p);
+	}
+	if (!ifDraw1){
+		beingShoot(0.8, 0, -15, 0.1, &ifExplostion1, p1);
+	}
+	if (!ifDraw2){
+		beingShoot(1.2, 0, -15, 0.15, &ifExplostion2, p2);
+	}
+	if (!ifDraw3){
+		beingShoot(0, 1.8, -15, 0.18, &ifExplostion3, p3);
+	}
+	if (!ifDraw4){
+		beingShoot(0.5, 0.5, -12.5, 0.22, &ifExplostion4, p4);
+	}
+	if (!ifDraw5){
+		beingShoot(-3.2, 0, -14, 0.25, &ifExplostion5, p5);
+	}
+	if (!ifDraw6){
+		beingShoot(4.0, -2, -15, 0.3, &ifExplostion6, p6);
+	}
+	if (!ifDraw7){
+		beingShoot(1, 2, -5, 0.4, &ifExplostion7, p7);
+	}
 	//glTranslatef(-lookAtLocationX, 0, -lookAtLocationZ);
 
 	glPopMatrix();
@@ -328,7 +476,7 @@ void keyboard(unsigned char key, int x, int y) {
 }
 void onMouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-	shoot_ball = true;
+		shoot_ball = true;
 	}
 }
 

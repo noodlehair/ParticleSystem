@@ -23,9 +23,9 @@ void FlameEmitter::flameEmitterInit(){
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
-	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	glEnable(GL_TEXTURE_2D);
@@ -61,6 +61,7 @@ void FlameEmitter::flameEmitterDisplay(){
 	}
 	for (loop = 0; loop<MAX_PARTICLES; loop++)
 	{
+		glDepthMask(GL_FALSE);
 		if (particle[loop].active)
 		{
 			float x = particle[loop].x;
@@ -89,17 +90,7 @@ void FlameEmitter::flameEmitterDisplay(){
 			if (particle[loop].life<-25.0f)
 			{
 				destroy = true;
-				/*particle[loop].life=1.0f;
-				particle[loop].fade=float(rand()%100)/1000.0f+0.003f;
-				particle[loop].x=0.0f;
-				particle[loop].y=0.0f;
-				particle[loop].z=0.0f;
-				particle[loop].xi=xspeed+float((rand()%60)-32.0f);
-				particle[loop].yi=yspeed+float((rand()%60)-30.0f);
-				particle[loop].zi=float((rand()%60)-30.0f);
-				particle[loop].r=1;
-				particle[loop].g=103/255.0;
-				particle[loop].b=0;			*/
+			
 			}
 
 

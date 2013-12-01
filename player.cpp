@@ -13,6 +13,7 @@
 player::player(float a):size(a){};
 
 void player::draw(float x, float y, float z){
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
 	float ambient=1;
 	float diffuse=1;
 	float specular=1;
@@ -33,9 +34,6 @@ void player::draw(float x, float y, float z){
 	glTranslatef(x, 0, 0);
 	glTranslatef(0, y-1, 0);
 	glTranslatef(0, 0, z-5);
-
-
-	glPushMatrix();
 	glRotatef(45,1,0,0);
 	glBegin(GL_QUADS); 
   
@@ -176,9 +174,7 @@ void player::draw(float x, float y, float z){
     glVertex3f(hexB6.x, hexB6.y, hexB6.z); 
   
     glEnd(); 
-	glPopMatrix();
-
-	glTranslatef(0, 1, 0);
+	glTranslatef(0, 0.4, 0);
 	glTranslatef(0, 0, -1);
 	glBegin(GL_LINES);
 
@@ -189,6 +185,7 @@ void player::draw(float x, float y, float z){
 	glVertex3f(0, 0.25, 0);
 	glVertex3f(0, -0.25, 0);
 	glEnd();
+	
 /*
 	//glTranslatef(x, 0, 0);
 	glTranslatef(0, 1, 0);
@@ -234,4 +231,5 @@ void player::draw(float x, float y, float z){
 
 
     glPopMatrix(); 
+	glPopAttrib();
 	}

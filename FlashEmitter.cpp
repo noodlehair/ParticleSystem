@@ -24,7 +24,7 @@ void FlashEmitter::flashEmitterInit(){
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
-	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -63,6 +63,7 @@ void FlashEmitter::flashEmitterDisplay(){
 
 	for (loop = 0; loop<MAX_FLASH_PARTICLES; loop++)
 	{
+		glDepthMask(GL_FALSE);
 		if (flash_particle[loop].active)
 		{
 			float x = flash_particle[loop].x;

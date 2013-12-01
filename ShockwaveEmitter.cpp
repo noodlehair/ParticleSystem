@@ -23,7 +23,7 @@ void ShockwaveEmitter::shockwaveEmitterInit(){
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClearDepth(1.0f);
-	glDisable(GL_DEPTH_TEST);
+	glDepthMask(GL_FALSE);
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -61,6 +61,7 @@ void ShockwaveEmitter::shockwaveEmitterDisplay(){
 	}
 	for (loop = 0; loop<MAX_SHOCK_PARTICLES; loop++)
 	{
+		glDepthMask(GL_FALSE);
 		if (shockwave_particle[0].active)
 		{
 			float x = shockwave_particle[0].x;

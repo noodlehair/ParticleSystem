@@ -69,6 +69,7 @@ void ShockwaveEmitter::shockwaveEmitterDisplay(){
 			float z = shockwave_particle[0].z;
 
 			//printf("y: %f \n", y);
+
 			glColor4f(shockwave_particle[0].r, shockwave_particle[0].g, shockwave_particle[0].b, shockwave_particle[0].life);
 			glBindTexture(GL_TEXTURE_2D, texture[0]);
 			glBegin(GL_TRIANGLE_STRIP);

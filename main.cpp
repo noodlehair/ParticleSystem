@@ -120,8 +120,8 @@ void init(void){
 
 	glEnable(GL_LIGHT0);
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	/*
 */
@@ -185,7 +185,7 @@ void init(void){
 
 
 void ball(void){
-	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	//glPushAttrib(GL_ALL_ATTRIB_BITS);
 	GLfloat mat_ambient[] = { 1, 1, 1, 1.0f };
 	GLfloat mat_diffuse[] = { 1, 1, 1, 1.0f };
 	GLfloat mat_specular[] = { 1, 1, 1, 1.0f };
@@ -202,10 +202,12 @@ void ball(void){
 
 	glutSolidSphere(0.15, 20, 12);
 	glPopMatrix();
-	glPopAttrib();
+	glColor3f(1.0f, 1.0f, 1.0f);
+	//glPopAttrib();
 }
 
 void ball_move(void){
+
 	if (!shoot_ball){
 		ball_z_distance = lookAtLocationZ - 6;
 	}
@@ -355,6 +357,7 @@ void display(void)
 	glRotatef(rotateA, 0, 1, 0);
 
 	//glTranslatef(lookAtLocationX, 0, lookAtLocationZ);
+
 	if (ifDraw){
 		//glEnable(GL_DEPTH_TEST);
 		object sun(0.5, 0, 0, -15, 0.95, 0.63, 0);
@@ -402,8 +405,15 @@ void display(void)
 		object planet7(0.4, 1, 2, -5, 0.2, 0, 0.21);
 		planet7.draw(1, 1, 1, 0, 50, lookAtLocationX, lookAtLocationY, ball_z_distance, &ifDraw7);
 	}
+	glPushMatrix();
 
+	glTranslatef(lookAtLocationX, lookAtLocationY, ball_z_distance);
 
+	if (shoot_ball)//>0.05&&lookAtLocationZ-6-ball_z_distance<-0.05)
+		ball();
+
+	glPopMatrix();
+   glEnable(GL_BLEND);
 
 	if (!ifDraw){
 		beingShoot(0, 0, -15, 0.5, &ifExplostion, p);
@@ -433,15 +443,8 @@ void display(void)
 
 	glPopMatrix();
 
-	glPushMatrix();
-
-	glTranslatef(lookAtLocationX, lookAtLocationY, ball_z_distance);
-
-	if (shoot_ball)//>0.05&&lookAtLocationZ-6-ball_z_distance<-0.05)
-		ball();
-
-	glPopMatrix();
-
+	glDisable(GL_BLEND);
+	
 	glutSwapBuffers();
 }
 

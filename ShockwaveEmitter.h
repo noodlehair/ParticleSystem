@@ -20,5 +20,5 @@ public:
 	float dx;   // shockwave x increment size 
 	float dz;   // shockwave z increment size
 	bool initFlag;
-	particles shockwave_particle[MAX_SHOCK_PARTICLES];	// Particle Array 
+	particles *shockwave_particle[MAX_SHOCK_PARTICLES];	// Particle Array 
 };

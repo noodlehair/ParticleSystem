@@ -12,9 +12,17 @@ FlashEmitter::FlashEmitter(const char* file_name){
 	dy = 0.2;
 	const_adder = 0.5;
 	initFlag = false;
+	for (loop = 0; loop < MAX_FLASH_PARTICLES; loop++)
+	{
+		flash_particle[loop] = new particles();
+	}
 }
 FlashEmitter :: ~FlashEmitter(void){
 	delete image;
+	for (loop = 0; loop < MAX_FLASH_PARTICLES; loop++)
+	{
+		delete flash_particle[loop];
+	}
 }
 
 void FlashEmitter::flashEmitterInit(){
@@ -34,22 +42,25 @@ void FlashEmitter::flashEmitterInit(){
 	float initx = -0.5;
 	for (loop = 0; loop<MAX_FLASH_PARTICLES; loop++)
 	{
-		flash_particle[loop].x = initx;
-		flash_particle[loop].y = 0;
-		flash_particle[loop].z = 0;
+		flash_particle[loop]->x = initx;
+		flash_particle[loop]->y = 0;
+		flash_particle[loop]->z = 0;
 		initx = 0.5;
-		flash_particle[loop].active = true;
-		flash_particle[loop].life = 1.0f;
-		flash_particle[loop].fade = float(rand() % 100) / 10000.0f - 0.005;
-		flash_particle[loop].r = 1.0;
-		flash_particle[loop].g = 1.0;;
-		flash_particle[loop].b = 153 / 255.0;
-		flash_particle[loop].xi = float((rand() % 50) - 26.0f);
-		flash_particle[loop].yi = float((rand() % 50) - 25.0f);
-		flash_particle[loop].zi = float((rand() % 50) - 25.0f);
-		flash_particle[loop].xg = 0.0f;
-		flash_particle[loop].yg = 0.0f;
-		flash_particle[loop].zg = 0.0f;
+		flash_particle[loop]->active = true;
+		flash_particle[loop]->life = 1.0f;
+		float ran = float(rand() / RAND_MAX);
+		ran = 5 + ran*(10 - 5);
+		printf(" %d %f \n", loop, ran);
+		flash_particle[loop]->fade = ran / 1000.0f;
+		flash_particle[loop]->r = 1.0;
+		flash_particle[loop]->g = 1.0;;
+		flash_particle[loop]->b = 153 / 255.0;
+		flash_particle[loop]->xi = float((rand() % 50) - 26.0f);
+		flash_particle[loop]->yi = float((rand() % 50) - 25.0f);
+		flash_particle[loop]->zi = float((rand() % 50) - 25.0f);
+		flash_particle[loop]->xg = 0.0f;
+		flash_particle[loop]->yg = 0.0f;
+		flash_particle[loop]->zg = 0.0f;
 	}
 
 
@@ -64,14 +75,14 @@ void FlashEmitter::flashEmitterDisplay(){
 	for (loop = 0; loop<MAX_FLASH_PARTICLES; loop++)
 	{
 		glDepthMask(GL_FALSE);
-		if (flash_particle[loop].active)
+		if (flash_particle[loop]->active)
 		{
-			float x = flash_particle[loop].x;
-			float y = flash_particle[loop].y;
-			float z = flash_particle[loop].z;
+			float x = flash_particle[loop]->x;
+			float y = flash_particle[loop]->y;
+			float z = flash_particle[loop]->z;
 
 
-			glColor4f(flash_particle[loop].r, flash_particle[loop].g, flash_particle[loop].b, flash_particle[loop].life);
+			glColor4f(flash_particle[loop]->r, flash_particle[loop]->g, flash_particle[loop]->b, flash_particle[loop]->life);
 			glBindTexture(GL_TEXTURE_2D, texture[0]);
 			glBegin(GL_TRIANGLE_STRIP);
 			glTexCoord2d(1, 1); glVertex3f(x + dx, y + dy, z);
@@ -80,36 +91,36 @@ void FlashEmitter::flashEmitterDisplay(){
 			glTexCoord2d(0, 0); glVertex3f(x - dx, y - dy, z);
 			glEnd();
 
-			flash_particle[loop].x += 0;//flash_particle[loop].xi/(slowdown);
-			flash_particle[loop].y += 0;//flash_particle[loop].yi/(slowdown);
-			flash_particle[loop].z += 0;//flash_particle[loop].zi/(slowdown);
+			flash_particle[loop]->x += 0;//flash_particle[loop]->xi/(slowdown);
+			flash_particle[loop]->y += 0;//flash_particle[loop]->yi/(slowdown);
+			flash_particle[loop]->z += 0;//flash_particle[loop]->zi/(slowdown);
 			dx += const_adder;
 			dy += const_adder;
-			flash_particle[loop].xi += flash_particle[loop].xg;
-			flash_particle[loop].yi += flash_particle[loop].yg;
-			flash_particle[loop].zi += flash_particle[loop].zg;
-			//	flash_particle[loop].life-=	flash_particle[loop].fade;		
+			flash_particle[loop]->xi += flash_particle[loop]->xg;
+			flash_particle[loop]->yi += flash_particle[loop]->yg;
+			flash_particle[loop]->zi += flash_particle[loop]->zg;
+			//	flash_particle[loop]->life-=	flash_particle[loop]->fade;		
 			//printf("y val %f", y);
 			//getchar();
-			if (dx > 10 && const_adder>0)
+			if (dx > 15 && const_adder>0)
 			{
 				const_adder *= -0.3;
 				//printf("x val %f", dx);
 				//getchar();
-				/*flash_particle[loop].life=1.0f;
-				flash_particle[loop].fade=float(rand()%100)/1000.0f+0.003f;
-				flash_particle[loop].x=0.0f;
-				flash_particle[loop].y=0.0f;
-				flash_particle[loop].z=0.0f;
-				flash_particle[loop].xi=xspeed+float((rand()%60)-32.0f);
-				flash_particle[loop].yi=yspeed+float((rand()%60)-30.0f);
-				flash_particle[loop].zi=float((rand()%60)-30.0f);
-				flash_particle[loop].r=1;
-				flash_particle[loop].g=103/255.0;
-				flash_particle[loop].b=0;			*/
+				/*flash_particle[loop]->life=1.0f;
+				flash_particle[loop]->fade=float(rand()%100)/1000.0f+0.003f;
+				flash_particle[loop]->x=0.0f;
+				flash_particle[loop]->y=0.0f;
+				flash_particle[loop]->z=0.0f;
+				flash_particle[loop]->xi=xspeed+float((rand()%60)-32.0f);
+				flash_particle[loop]->yi=yspeed+float((rand()%60)-30.0f);
+				flash_particle[loop]->zi=float((rand()%60)-30.0f);
+				flash_particle[loop]->r=1;
+				flash_particle[loop]->g=103/255.0;
+				flash_particle[loop]->b=0;			*/
 			}
 			if (dx < 0){
-				flash_particle[loop].life = 0.0f;
+				flash_particle[loop]->life = 0.0f;
 			}
 
 

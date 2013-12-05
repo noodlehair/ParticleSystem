@@ -2,7 +2,7 @@
 #include "ImageIO.h"
 #include <glut.h>
 #include <unordered_set>
-#define	MAX_PARTICLES	2000
+#define	MAX_PARTICLES	5
 using namespace std;
 class FlameEmitter{
 public:
@@ -19,6 +19,9 @@ public:
 	GLuint	delay;
 	GLuint	texture[1];
 	bool initFlag;
-	particles particle[MAX_PARTICLES];	// Particle Array 
+	particles *particle[MAX_PARTICLES];	// Particle Array 
+	float const_adder[MAX_PARTICLES];
+	float dx[MAX_PARTICLES];;
+	float dy[MAX_PARTICLES];;
 	bool destroy;
 };

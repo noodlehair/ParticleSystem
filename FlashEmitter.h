@@ -21,5 +21,5 @@ public:
 	float dy;
 	float const_adder;
 	bool initFlag;
-	particles flash_particle[MAX_FLASH_PARTICLES];	// Particle Array 
+	particles *flash_particle[MAX_FLASH_PARTICLES];	// Particle Array 
 };

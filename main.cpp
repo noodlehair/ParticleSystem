@@ -305,7 +305,7 @@ void beingShoot(float x, float y, float z, float radius, bool* ifex, ParticleSys
 		//glTranslatef(0,0,-15);
 		glTranslatef(x, y, z);
 		//glRotatef(5,1,0,0);
-		glScalef(radius / 5, radius / 5, radius / 5);
+		glScalef(radius/2.5 , radius/2.5 , radius /2.5);
 		/*glDisable(GL_DEPTH_TEST);
 		glEnable(GL_BLEND);*/
 		glDepthMask(GL_FALSE);
@@ -313,7 +313,7 @@ void beingShoot(float x, float y, float z, float radius, bool* ifex, ParticleSys
 		glDepthMask(GL_TRUE);
 		glPopMatrix();
 		if (ps->flameEmitter->destroy){
-
+			printf("delete");
 			delete ps;
 			*ifex = false;
 

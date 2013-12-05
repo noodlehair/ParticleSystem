@@ -7,18 +7,30 @@
 FlameEmitter::FlameEmitter(const char* file_name){
 
 	image = new ImageIO(file_name);
-	slowdown = 2.0f;
+	slowdown = 5.0f;
 	zoom = -20.0f;
 	initFlag = false;
 	destroy = false;
+	const_adder[0] = 0.5;
+	const_adder[1] = 0.5;
+	const_adder[2] = 0.5;
+	const_adder[3] = 0.5;
+	for (loop = 0; loop < MAX_PARTICLES; loop++)
+	{
+		particle[loop] = new particles();
+	}
 }
 FlameEmitter :: ~FlameEmitter(void){
 	delete image;
+	for (loop = 0; loop < MAX_PARTICLES; loop++)
+	{
+		delete particle[loop];
+	}
 }
 
 void FlameEmitter::flameEmitterInit(){
 	//ImageIO* the_image = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/falme.ppm");
-	PlaySound(TEXT("explosion4.wav"), NULL, SND_FILENAME |SND_ASYNC);
+	PlaySound(TEXT("explosion4.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	LoadGLTextures(image, &texture[0]);
 	glShadeModel(GL_SMOOTH);
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -30,26 +42,38 @@ void FlameEmitter::flameEmitterInit(){
 	glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texture[0]);
-	float x = -1.1, y = 1.1;
+	//float x = -1.1, y = 1.1;
+	float initx = -0.5;
+
+	/*particle[1]->x = -1;;
+	particle[2]->y = 1;*/
 	for (loop = 0; loop<MAX_PARTICLES; loop++)
 	{
-		particle[loop].x = x;
-		particle[loop].y = y;
-		particle[loop].z = 0;
-		x += 0.001;
-		y -= 0.001;
-		particle[loop].active = true;
-		particle[loop].life = 1.0f;
-		particle[loop].fade = float(rand() % 100) / 1000.0f + 0.01f;
-		particle[loop].r = 1;
-		particle[loop].g = 103 / 255.0;
-		particle[loop].b = 0;
-		particle[loop].xi = float((rand() % 50) - 26.0f) * 3;
-		particle[loop].yi = float((rand() % 50) - 25.0f) * 3;
-		particle[loop].zi = float((rand() % 50) - 25.0f) * 3;
-		particle[loop].xg = 0.0f;
-		particle[loop].yg = 0.0f;
-		particle[loop].zg = 0.0f;
+		dx[loop] = 0.2;
+		dy[loop] = 0.2;
+		particle[loop]->x = 0;
+		particle[loop]->y = 0;
+		particle[loop]->z = 0;
+		const_adder[loop] = 1.8;
+		//particle[loop].y =y;
+		//x+=0.001;
+		//y-=0.001;
+		initx = 0.5;
+		particle[loop]->active = true;
+		particle[loop]->life = 1.0f;
+		float ran = float(rand() / RAND_MAX);
+		ran = 5 + ran*(10 - 5);
+		printf(" %d %f \n", loop, ran);
+		particle[loop]->fade = ran / 1000.0f;
+		particle[loop]->r = 1;
+		particle[loop]->g = 120 / 255.0;
+		particle[loop]->b = 0;
+		particle[loop]->xi = float((rand() % 50) - 26.0f) * 3;
+		particle[loop]->yi = float((rand() % 50) - 25.0f) * 3;
+		particle[loop]->zi = float((rand() % 50) - 25.0f) * 3;
+		particle[loop]->xg = 0.0f;
+		particle[loop]->yg = 0.0f;
+		particle[loop]->zg = 0.0f;
 	}
 
 }
@@ -62,35 +86,67 @@ void FlameEmitter::flameEmitterDisplay(){
 	for (loop = 0; loop<MAX_PARTICLES; loop++)
 	{
 		glDepthMask(GL_FALSE);
-		if (particle[loop].active)
+		if (particle[loop]->active)
 		{
-			float x = particle[loop].x;
-			float y = particle[loop].y;
-			float z = particle[loop].z;
+			float x = particle[loop]->x;
+			float y = particle[loop]->y;
+			float z = particle[loop]->z + zoom;
+			//printf(" %d %f \n", loop, particle[loop]->fade);
+			//printf(" %d %f  life\n", loop, particle[loop]->life);
 
-
-			glColor4f(particle[loop].r, particle[loop].g, particle[loop].b, particle[loop].life);
+			glColor4f(particle[loop]->r, particle[loop]->g, particle[loop]->b, particle[loop]->life);
 			glBindTexture(GL_TEXTURE_2D, texture[0]);
 			glBegin(GL_TRIANGLE_STRIP);
-			glTexCoord2d(1, 1); glVertex3f(x + 1.0f, y + 1.0f, z);
-			glTexCoord2d(0, 1); glVertex3f(x - 1.0f, y + 1.0f, z);
-			glTexCoord2d(1, 0); glVertex3f(x + 1.0f, y - 1.0f, z);
-			glTexCoord2d(0, 0); glVertex3f(x - 1.0f, y - 1.0f, z);
+			glTexCoord2d(1, 1); glVertex3f(x + dx[loop], y + dy[loop], z);
+			glTexCoord2d(0, 1); glVertex3f(x - dx[loop], y + dy[loop], z);
+			glTexCoord2d(1, 0); glVertex3f(x + dx[loop], y - dy[loop], z);
+			glTexCoord2d(0, 0); glVertex3f(x - dx[loop], y - dy[loop], z);
 			glEnd();
 
-			particle[loop].x += particle[loop].xi / (slowdown * 500);
-			particle[loop].y += particle[loop].yi / (slowdown * 500);
-			particle[loop].z += particle[loop].zi / (slowdown * 500);
+			particle[loop]->x += 0;//particle[loop].xi/(slowdown*500);
+			particle[loop]->y += 0;//particle[loop].yi/(slowdown*500);
+			particle[loop]->z += 0;//particle[loop].zi/(slowdown*500);
+			dx[loop] += const_adder[loop];
+			dy[loop] += const_adder[loop];
+			/*particle[loop]->x += particle[loop]->xi / (slowdown * 500);
+			particle[loop]->y += particle[loop]->yi / (slowdown * 500);
+			particle[loop]->z += particle[loop]->zi / (slowdown * 500);*/
 
-			particle[loop].xi += particle[loop].xg;
-			particle[loop].yi += particle[loop].yg;
-			particle[loop].zi += particle[loop].zg;
-			particle[loop].life -= particle[loop].fade;
 
-			if (particle[loop].life<-25.0f)
+
+
+			if (dx[loop] > 7)
 			{
-				destroy = true;
-			
+				particle[loop]->life -= particle[loop]->fade;
+
+				const_adder[loop] = 0;
+
+				//const_adder[loop] = 0;
+				//if (particle[loop].r - 0.003 <0)
+				//	particle[loop].r = 0;
+				//else
+				//	particle[loop].r = particle[loop].r - 0.003;
+				//if (particle[loop].g - 0.001 <0)
+				//	particle[loop].g = 0;
+				//else
+				//	particle[loop].g = particle[loop].g - 0.001;
+				//if (particle[loop].b - 0.001 <0)
+				//	particle[loop].b = 0;
+				//else
+				//	particle[loop].b = particle[loop].b - 0.001;
+				///*particle[loop].g=1;
+				//particle[loop].b=0;	*/
+				particle[loop]->x += particle[loop]->xi / (slowdown * 500);
+				particle[loop]->y += particle[loop]->yi / (slowdown * 500);
+				particle[loop]->z += particle[loop]->zi / (slowdown * 500);
+
+				//	printf(" %d %f %f %f  he \n", loop, particle[loop]->x, particle[loop]->y, particle[loop]->z);
+			}
+
+			if (particle[loop]->life<-0.7f)
+			{
+			destroy = true;
+
 			}
 
 
@@ -98,5 +154,6 @@ void FlameEmitter::flameEmitterDisplay(){
 
 		}
 	}
+	//getchar();
 
 }

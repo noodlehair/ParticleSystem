@@ -24,6 +24,7 @@ void ParticleSystem :: display(){
 	shockwaveEmitter->shockwaveEmitterDisplay();	
 	flameEmitter->flameEmitterDisplay();
     debrisEmitter->debrisEmitterDisplay();
+	//getchar();
 	glDisable(GL_TEXTURE_2D);								
 
 }

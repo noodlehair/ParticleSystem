@@ -88,35 +88,14 @@ void ShockwaveEmitter::shockwaveEmitterDisplay(){
 			glTexCoord2d(0, 0); glVertex3f(x - dx, y, z - dz);
 			glEnd();
 			//printf("hrllo");
-			dx += 1.5f;
-			dz += 1.5f;
-			//shockwave_particle[0]->x+=0;	//shockwave_particle[0]->xi/(slowdown*500);;
-			//shockwave_particle[0]->y+=0;	//shockwave_particle[0]->yi/(slowdown*500);;
-			//shockwave_particle[0]->z+=0;	//shockwave_particle[0]->zi/(slowdown*500);;
+			dx += 0.5f;
+			dz += 0.5f;
+			
 
 			shockwave_particle[0]->xi += shockwave_particle[0]->xg;
 			shockwave_particle[0]->yi += shockwave_particle[0]->yg;
 			shockwave_particle[0]->zi += shockwave_particle[0]->zg;
-			shockwave_particle[0]->life -= shockwave_particle[0]->fade + 0.020;
-
-			if (shockwave_particle[0]->life<0.0f)
-			{
-				/*particle[loop].life=1.0f;
-				particle[loop].fade=float(rand()%100)/1000.0f+0.003f;
-				particle[loop].x=0.0f;
-				particle[loop].y=0.0f;
-				particle[loop].z=0.0f;
-				particle[loop].xi=xspeed+float((rand()%60)-32.0f);
-				particle[loop].yi=yspeed+float((rand()%60)-30.0f);
-				particle[loop].zi=float((rand()%60)-30.0f);
-				particle[loop].r=1;
-				particle[loop].g=103/255.0;
-				particle[loop].b=0;			*/
-			}
-
-
-
-
+			shockwave_particle[0]->life -= (shockwave_particle[0]->fade + 0.020);
 		}
 	}
 

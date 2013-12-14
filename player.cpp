@@ -10,7 +10,31 @@
 #endif
 
 #define GLUT_DISABLE_ATEXIT_HACK
-player::player(float a):size(a){};
+player::player(float a) { 
+	image = new ImageIO("spaceship.ppm");
+	upImage = new ImageIO("spaceship1.ppm");
+	size = a; 
+	glGenTextures(1, &p_tex1);
+		textureMapping(p_tex1, upImage);
+		glGenTextures(1, &p_tex);
+		textureMapping(p_tex, image);
+		//glEnable(GL_TEXTURE_2D);
+		//glBindTexture(GL_TEXTURE_2D, p_tex);
+		printf("PALAYER");
+}
+
+
+void player::textureMapping(GLuint texture, ImageIO* image){
+
+	glEnable(GL_TEXTURE_2D);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, image->getWidth(), image->getHeight(), 0, GL_RGB, GL_FLOAT, image->getImageDisplayArray());
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+}
 
 void player::draw(float x, float y, float z){
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -35,7 +59,8 @@ void player::draw(float x, float y, float z){
 	glTranslatef(0, y-1, 0);
 	glTranslatef(0, 0, z-5);
 	glRotatef(45,1,0,0);
-	glBegin(GL_QUADS); 
+	glEnable(GL_TEXTURE_2D);
+	
   
     node back1(-0.25, 0.15, 0.25); 
     node back2(-.5, -.35, .25); 
@@ -70,119 +95,154 @@ void player::draw(float x, float y, float z){
     node fb3(-0.25, -0.087, -0.25); 
   
     //backside 
-    glColor3f(0.2,0,0); 
-    glVertex3f(back1.x, back1.y, back1.z); 
-    glVertex3f(back2.x, back2.y, back2.z); 
-    glVertex3f(back3.x, back3.y, back3.z); 
-    glVertex3f(back4.x, back4.y, back4.z); 
-  
-    //frontside 
-    glColor3f(0.6, 0.1, 0); 
-    glVertex3f(front1.x, front1.y, front1.z); 
-    glVertex3f(front2.x, front2.y, front2.z); 
-    glVertex3f(fa1.x, fa1.y, fa1.z); 
-    glVertex3f(fb1.x, fb1.y, fb1.z); 
-  
-    glVertex3f(fa1.x, fa1.y, fa1.z); 
-    glVertex3f(fa2.x, fa2.y, fa2.z); 
-    glVertex3f(hexA2.x, hexA2.y, hexA2.z); 
-    glVertex3f(hexA1.x, hexA1.y, hexA1.z); 
-  
-    glVertex3f(fa2.x, fa2.y, fa2.z); 
-    glVertex3f(fa3.x, fa3.y, fa3.z); 
-    glVertex3f(hexA3.x, hexA3.y, hexA3.z); 
-    glVertex3f(hexA2.x, hexA2.y, hexA2.z); 
-  
-    glVertex3f(fa3.x, fa3.y, fa3.z); 
-    glVertex3f(front3.x, front3.y, front3.z); 
-    glVertex3f(front4.x, front4.y, front4.z); 
-    glVertex3f(fb3.x, fb3.y, fb3.z); 
-  
-    glVertex3f(hexA5.x, hexA5.y, hexA5.z); 
-    glVertex3f(hexA4.x, hexA4.y, hexA4.z); 
-    glVertex3f(fb3.x, fb3.y, fb3.z); 
-    glVertex3f(fb2.x, fb2.y, fb2.z); 
-      
-    glVertex3f(hexA5.x, hexA5.y, hexA5.z); 
-    glVertex3f(fb2.x, fb2.y, fb2.z); 
-    glVertex3f(fb1.x, fb1.y, fb1.z); 
-    glVertex3f(hexA6.x, hexA6.y, hexA6.z); 
-  
-    //upside 
-    glColor3f(.25, .30, 0.3); 
-    glVertex3f(back1.x, back1.y, back1.z); 
-    glVertex3f(back4.x, back4.y, back4.z); 
-    glVertex3f(front2.x, front2.y, front2.z); 
-    glVertex3f(front1.x, front1.y, front1.z); 
-  
-    //leftside 
-    glColor3f(25, 25, 100); 
-    glVertex3f(back1.x, back1.y, back1.z); 
-    glVertex3f(front1.x, front1.y, front1.z); 
-    glVertex3f(front4.x, front4.y, front4.z); 
-    glVertex3f(back2.x, back2.y, back2.z); 
-  
-    //rightside 
-    glColor3f(25, 25, 100); 
-    glVertex3f(back4.x, back4.y, back4.z); 
-    glVertex3f(back3.x, back3.y, back3.z); 
-    glVertex3f(front3.x, front3.y, front3.z); 
-    glVertex3f(front2.x, front2.y, front2.z); 
-  
-    //downside 
-    glColor3f(.25, .30, 0.3); 
-    glVertex3f(back3.x, back3.y, back3.z); 
-    glVertex3f(back2.x, back2.y, back2.z); 
-    glVertex3f(front4.x, front4.y, front4.z); 
-    glVertex3f(front3.x, front3.y, front3.z); 
-  
-    //pipe 
-    glColor3f(0.1, 0.1, 0.5); 
-    glVertex3f(hexA1.x, hexA1.y, hexA1.z); 
-    glVertex3f(hexA2.x, hexA2.y, hexA2.z); 
-    glVertex3f(hexB2.x, hexB2.y, hexB2.z); 
-    glVertex3f(hexB1.x, hexB1.y, hexB1.z); 
-  
-    glColor3f(0.1, 0.2, 0.5); 
-    glVertex3f(hexB2.x, hexB2.y, hexB2.z); 
-    glVertex3f(hexA2.x, hexA2.y, hexA2.z); 
-    glVertex3f(hexA3.x, hexA3.y, hexA3.z); 
-    glVertex3f(hexB3.x, hexB3.y, hexB3.z); 
-  
-    glColor3f(0.1, 0.3, 0.5); 
-    glVertex3f(hexA3.x, hexA3.y, hexA3.z); 
-    glVertex3f(hexA4.x, hexA4.y, hexA4.z); 
-    glVertex3f(hexB4.x, hexB4.y, hexB4.z); 
-    glVertex3f(hexB3.x, hexB3.y, hexB3.z); 
-  
-    glColor3f(0.1, 0.4, 0.5); 
-    glVertex3f(hexA4.x, hexA4.y, hexA4.z); 
-    glVertex3f(hexA5.x, hexA5.y, hexA5.z); 
-    glVertex3f(hexB5.x, hexB5.y, hexB5.z); 
-    glVertex3f(hexB4.x, hexB4.y, hexB4.z); 
-  
-    glColor3f(0.1, 0.5, 0.5); 
-    glVertex3f(hexA5.x, hexA5.y, hexA5.z); 
-    glVertex3f(hexA6.x, hexA6.y, hexA6.z); 
-    glVertex3f(hexB6.x, hexB6.y, hexB6.z); 
-    glVertex3f(hexB5.x, hexB5.y, hexB5.z); 
-  
-    glColor3f(0.1, 0.6, 0.5); 
-    glVertex3f(hexA6.x, hexA6.y, hexA6.z); 
-    glVertex3f(hexA1.x, hexA1.y, hexA1.z); 
-    glVertex3f(hexB1.x, hexB1.y, hexB1.z); 
-    glVertex3f(hexB6.x, hexB6.y, hexB6.z); 
-  
-    glEnd(); 
+	glBindTexture(GL_TEXTURE_2D, p_tex);
+	glColor3f(.25, .30, 0.3);
+	glBegin(GL_QUADS);
+	
+	glTexCoord2d(1, 1);
+	glVertex3f(back1.x, back1.y, back1.z);
+	glTexCoord2d(0, 1);
+	glVertex3f(back2.x, back2.y, back2.z);
+	glTexCoord2d(1, 0);
+	glVertex3f(back3.x, back3.y, back3.z);
+	glTexCoord2d(0, 0);
+	glVertex3f(back4.x, back4.y, back4.z);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	//frontside 
+	glBegin(GL_QUADS);
+	
+	glColor3f(0.6, 0.1, 0); glVertex3f(front1.x, front1.y, front1.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(front2.x, front2.y, front2.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(fa1.x, fa1.y, fa1.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(fb1.x, fb1.y, fb1.z);
+
+	glColor3f(0.6, 0.1, 0); glVertex3f(fa1.x, fa1.y, fa1.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(fa2.x, fa2.y, fa2.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(hexA2.x, hexA2.y, hexA2.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(hexA1.x, hexA1.y, hexA1.z);
+
+	glColor3f(0.6, 0.1, 0); glVertex3f(fa2.x, fa2.y, fa2.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(fa3.x, fa3.y, fa3.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(hexA3.x, hexA3.y, hexA3.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(hexA2.x, hexA2.y, hexA2.z);
+
+	glColor3f(0.6, 0.1, 0); glVertex3f(fa3.x, fa3.y, fa3.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(front3.x, front3.y, front3.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(front4.x, front4.y, front4.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(fb3.x, fb3.y, fb3.z);
+
+	glColor3f(0.6, 0.1, 0); glVertex3f(hexA5.x, hexA5.y, hexA5.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(hexA4.x, hexA4.y, hexA4.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(fb3.x, fb3.y, fb3.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(fb2.x, fb2.y, fb2.z);
+
+	glColor3f(0.6, 0.1, 0); glVertex3f(hexA5.x, hexA5.y, hexA5.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(fb2.x, fb2.y, fb2.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(fb1.x, fb1.y, fb1.z);
+	glColor3f(0.6, 0.1, 0); glVertex3f(hexA6.x, hexA6.y, hexA6.z);
+	glEnd();
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, p_tex1);
+	//upside 
+	glColor3f(.25, .30, 0.3);
+	glBegin(GL_QUADS);
+	//
+	glTexCoord2d(1, 1);
+	glVertex3f(back1.x, back1.y, back1.z);
+	glTexCoord2d(0, 1);
+	glVertex3f(back4.x, back4.y, back4.z);
+	glTexCoord2d(1, 0);
+	glVertex3f(front2.x, front2.y, front2.z);
+	glTexCoord2d(0, 0);
+	glVertex3f(front1.x, front1.y, front1.z);
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, p_tex);
+	//leftside 
+	glColor3f(.25, .30, 0.3);
+	glBegin(GL_QUADS);
+	//
+	glTexCoord2d(1, 1);
+	glVertex3f(back1.x, back1.y, back1.z);
+	glTexCoord2d(0, 1);
+	glVertex3f(front1.x, front1.y, front1.z);
+	glTexCoord2d(1, 0);
+	glVertex3f(front4.x, front4.y, front4.z);
+	glTexCoord2d(0, 0);
+	glVertex3f(back2.x, back2.y, back2.z);
+	glEnd();
+	glBindTexture(GL_TEXTURE_2D, p_tex);
+	//rightside 
+	glColor3f(.25, .30, 0.3);
+	glBegin(GL_QUADS);
+	//
+	glTexCoord2d(1, 1);
+	glVertex3f(back4.x, back4.y, back4.z);
+	glTexCoord2d(0, 1);
+	glVertex3f(back3.x, back3.y, back3.z);
+	glTexCoord2d(1, 0);
+	glVertex3f(front3.x, front3.y, front3.z);
+	glTexCoord2d(0, 0);
+	glVertex3f(front2.x, front2.y, front2.z);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+	//downside 
+	glBegin(GL_QUADS);
+	
+	glColor3f(.25, .30, 0.3); glVertex3f(back3.x, back3.y, back3.z);
+	glColor3f(.25, .30, 0.3); glVertex3f(back2.x, back2.y, back2.z);
+	glColor3f(.25, .30, 0.3); glVertex3f(front4.x, front4.y, front4.z);
+	glColor3f(.25, .30, 0.3); glVertex3f(front3.x, front3.y, front3.z);
+	glEnd();
+	//pipe 
+	glBegin(GL_QUADS);
+	
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA1.x, hexA1.y, hexA1.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA2.x, hexA2.y, hexA2.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB2.x, hexB2.y, hexB2.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB1.x, hexB1.y, hexB1.z);
+
+	
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB2.x, hexB2.y, hexB2.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA2.x, hexA2.y, hexA2.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA3.x, hexA3.y, hexA3.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB3.x, hexB3.y, hexB3.z);
+
+	
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA3.x, hexA3.y, hexA3.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA4.x, hexA4.y, hexA4.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB4.x, hexB4.y, hexB4.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB3.x, hexB3.y, hexB3.z);
+
+	
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA4.x, hexA4.y, hexA4.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA5.x, hexA5.y, hexA5.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB5.x, hexB5.y, hexB5.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB4.x, hexB4.y, hexB4.z);
+
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA5.x, hexA5.y, hexA5.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA6.x, hexA6.y, hexA6.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB6.x, hexB6.y, hexB6.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB5.x, hexB5.y, hexB5.z);
+
+	
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA6.x, hexA6.y, hexA6.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexA1.x, hexA1.y, hexA1.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB1.x, hexB1.y, hexB1.z);
+	glColor3f(0.2, 0.0, 0.0); glVertex3f(hexB6.x, hexB6.y, hexB6.z);
+
+	glEnd();
 	glTranslatef(0, 0.4, 0);
 	glTranslatef(0, 0, -1);
 	glBegin(GL_LINES);
 
 	glColor3f(1, 0, 0); 
 	glVertex3f(-0.25, 0, 0);
+	glColor3f(1, 0, 0);
 	glVertex3f(0.25, 0, 0);
-
+	glColor3f(1, 0, 0);
 	glVertex3f(0, 0.25, 0);
+	glColor3f(1, 0, 0);
 	glVertex3f(0, -0.25, 0);
 	glEnd();
 	
@@ -232,4 +292,5 @@ void player::draw(float x, float y, float z){
 
     glPopMatrix(); 
 	glPopAttrib();
+	 
 	}

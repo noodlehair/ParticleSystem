@@ -103,39 +103,17 @@ void FlameEmitter::flameEmitterDisplay(){
 			glTexCoord2d(0, 0); glVertex3f(x - dx[loop], y - dy[loop], z);
 			glEnd();
 
-			particle[loop]->x += 0;//particle[loop].xi/(slowdown*500);
-			particle[loop]->y += 0;//particle[loop].yi/(slowdown*500);
-			particle[loop]->z += 0;//particle[loop].zi/(slowdown*500);
+			
 			dx[loop] += const_adder[loop];
 			dy[loop] += const_adder[loop];
-			/*particle[loop]->x += particle[loop]->xi / (slowdown * 500);
-			particle[loop]->y += particle[loop]->yi / (slowdown * 500);
-			particle[loop]->z += particle[loop]->zi / (slowdown * 500);*/
-
-
-
-
+			
 			if (dx[loop] > 7)
 			{
 				particle[loop]->life -= particle[loop]->fade;
 
 				const_adder[loop] = 0;
 
-				//const_adder[loop] = 0;
-				//if (particle[loop].r - 0.003 <0)
-				//	particle[loop].r = 0;
-				//else
-				//	particle[loop].r = particle[loop].r - 0.003;
-				//if (particle[loop].g - 0.001 <0)
-				//	particle[loop].g = 0;
-				//else
-				//	particle[loop].g = particle[loop].g - 0.001;
-				//if (particle[loop].b - 0.001 <0)
-				//	particle[loop].b = 0;
-				//else
-				//	particle[loop].b = particle[loop].b - 0.001;
-				///*particle[loop].g=1;
-				//particle[loop].b=0;	*/
+				
 				particle[loop]->x += particle[loop]->xi / (slowdown * 500);
 				particle[loop]->y += particle[loop]->yi / (slowdown * 500);
 				particle[loop]->z += particle[loop]->zi / (slowdown * 500);
@@ -145,7 +123,7 @@ void FlameEmitter::flameEmitterDisplay(){
 
 			if (particle[loop]->life<-0.7f)
 			{
-			destroy = true;
+				destroy = true;
 
 			}
 

@@ -91,33 +91,20 @@ void FlashEmitter::flashEmitterDisplay(){
 			glTexCoord2d(0, 0); glVertex3f(x - dx, y - dy, z);
 			glEnd();
 
-			flash_particle[loop]->x += 0;//flash_particle[loop]->xi/(slowdown);
-			flash_particle[loop]->y += 0;//flash_particle[loop]->yi/(slowdown);
-			flash_particle[loop]->z += 0;//flash_particle[loop]->zi/(slowdown);
+		
 			dx += const_adder;
 			dy += const_adder;
 			flash_particle[loop]->xi += flash_particle[loop]->xg;
 			flash_particle[loop]->yi += flash_particle[loop]->yg;
 			flash_particle[loop]->zi += flash_particle[loop]->zg;
-			//	flash_particle[loop]->life-=	flash_particle[loop]->fade;		
-			//printf("y val %f", y);
+
 			//getchar();
-			if (dx > 15 && const_adder>0)
+			if (dx > 12 && const_adder>0)
 			{
 				const_adder *= -0.3;
 				//printf("x val %f", dx);
 				//getchar();
-				/*flash_particle[loop]->life=1.0f;
-				flash_particle[loop]->fade=float(rand()%100)/1000.0f+0.003f;
-				flash_particle[loop]->x=0.0f;
-				flash_particle[loop]->y=0.0f;
-				flash_particle[loop]->z=0.0f;
-				flash_particle[loop]->xi=xspeed+float((rand()%60)-32.0f);
-				flash_particle[loop]->yi=yspeed+float((rand()%60)-30.0f);
-				flash_particle[loop]->zi=float((rand()%60)-30.0f);
-				flash_particle[loop]->r=1;
-				flash_particle[loop]->g=103/255.0;
-				flash_particle[loop]->b=0;			*/
+				
 			}
 			if (dx < 0){
 				flash_particle[loop]->life = 0.0f;

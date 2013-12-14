@@ -77,7 +77,7 @@ float t = 5.0f;
 float camera_yaw = 0.0f;
 float camera_pitch = 0.0f;
 float CAMERA_Move = 1.0f;
-
+player *spaceShip;
 void textureMapping(GLuint texture, ImageIO* image){
 
 	glEnable(GL_TEXTURE_2D);
@@ -95,12 +95,12 @@ void init(void){
 
 
 	glClearColor(0.0, 0.0, 0.0, 0.0);
-	tex_image_1 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
-	tex_image_2 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
-	tex_image_3 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
-	tex_image_4 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
-	tex_image_5 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
-	tex_image_6 = new ImageIO("C:/Users/Lanceton/Dropbox/Compsci 344 Final Project/Particle System Code/sky7.ppm");
+	tex_image_1 = new ImageIO("sky7.ppm");
+	tex_image_2 = new ImageIO("sky7.ppm");
+	tex_image_3 = new ImageIO("sky7.ppm");
+	tex_image_4 = new ImageIO("sky7.ppm");
+	tex_image_5 = new ImageIO("sky7.ppm");
+	tex_image_6 = new ImageIO("sky7.ppm");
 	//texture mapping
 
 
@@ -180,7 +180,7 @@ void init(void){
 	p6 = new ParticleSystem();
 	p7 = new ParticleSystem();
 
-
+	spaceShip = new player(2.0);
 }
 
 
@@ -229,7 +229,7 @@ void idle(void){
 	glutPostRedisplay();
 }
 
-void drawPolygon(){
+void drawSkybox(){
 
 	glPushMatrix();
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -319,6 +319,7 @@ void beingShoot(float x, float y, float z, float radius, bool* ifex, ParticleSys
 
 		}
 		glPopAttrib();
+		
 	}
 
 
@@ -344,14 +345,17 @@ void display(void)
 	glDisable(GL_LIGHTING);
 	glDepthMask(GL_FALSE);
 	glEnable(GL_TEXTURE_2D);
-	drawPolygon();
+	drawSkybox();
 	glDepthMask(GL_TRUE);
 	glDisable(GL_TEXTURE_2D);
 	glEnable(GL_LIGHTING);
 
-	player spaceShip(2.0);
-	spaceShip.draw(lookAtLocationX, lookAtLocationY, lookAtLocationZ);
+	//player spaceShip(2.0);
+	//spaceShip = new player(2.0);
+	spaceShip->draw(lookAtLocationX, lookAtLocationY, lookAtLocationZ);
+	glDisable(GL_TEXTURE_2D);
 
+	//delete spaceShip;
 	glPushMatrix();
 
 	glRotatef(rotateA, 0, 1, 0);
@@ -444,8 +448,9 @@ void display(void)
 	glPopMatrix();
 
 	glDisable(GL_BLEND);
-	
+	glFlush();
 	glutSwapBuffers();
+	
 }
 
 void reshape(int w, int h)
@@ -480,6 +485,7 @@ void keyboard(unsigned char key, int x, int y) {
 void onMouse(int button, int state, int x, int y) {
 	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
 		shoot_ball = true;
+		PlaySound(TEXT("laser.wav"), NULL, SND_FILENAME | SND_ASYNC);
 	}
 }
 
@@ -494,7 +500,7 @@ int main(int argc, char * argv[])
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
 	glutInitWindowSize(win_width, win_height);
 
-	glutCreateWindow("Material World");
+	glutCreateWindow("Particle System");
 
 	init();
 	glutDisplayFunc(display);

@@ -1,7 +1,7 @@
 #include "DebrisEmitter.h"
 #include "LocalGraphicsLib.h"
 
-#define MAX_DEBRIS_PARTICLES 500
+#define MAX_DEBRIS_PARTICLES 100
 
 DebrisEmitter::DebrisEmitter(const char* file_name_1, const char* file_name_2){
 
